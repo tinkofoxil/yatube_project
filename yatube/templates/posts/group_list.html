@@ -1,22 +1,32 @@
 {% extends 'base.html' %}
 
+{% load thumbnail%}
 
-{% block title %}
-  <title>{{ title }}</title>
-{% endblock %}
+{% block title %} {{ group.title }} {% endblock %}
 {% block content%}
   <h1>{{ group.title }}</h1>
-  <p><b>Описание:</b> {{ group.description }}</p>
-  {% for post in posts %}
-  <ul>
-    <li>
-      Автор: {{ post.author.get_full_name }}
-    </li>
-    <li>
-      Дата публикации: {{ post.pub_date|date:"d E Y" }}
-    </li>
-  </ul>
-  <p>{{ post.text }}</p> 
-  {% if not forloop.last %}<hr>{% endif %}
-  {% endfor %}
+  <p>{{ group.description }}</p>
+    {% for post in page_obj %}
+    <article>
+      <ul>
+        <li>
+          Автор: {{ post.author.get_full_name }}
+        </li>
+        <li>
+          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+        </li>
+      </ul>
+      {% thumbnail post.image "350x350" crop="center" upscale=True as im %}
+        <img class="rounded mx-auto d-block" alt="" src="{{ im.url }}">
+      {% endthumbnail %}
+      <p>{{ post.text }}</p> 
+      <p><a class="nav-link" href={% url 'posts:post_detail' post.id %}>
+        <button type="submit" class="btn btn-light"> подробная информация </button>
+      </a></p>
+      {% if not forloop.last %}<hr>{% endif %}
+    </article>
+    {% endfor %}
+
+    {% include 'posts/includes/paginator.html' %}
+
 {% endblock %}

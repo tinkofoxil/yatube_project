@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Custom 404{% endblock %}
+{% block content %}
+  <h1>Custom 404</h1>
+  <p>Страницы с адресом {{ path }} не существует</p>
+  <a class="nav-link" href={% url 'posts:index' %}>
+    <button type="submit" class="btn btn-primary"> Идите на главную </button>
+  </a>
+{% endblock %}
